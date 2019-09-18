@@ -172,6 +172,7 @@ public class RemoteViewer extends javax.swing.JFrame
                         
                         
                         image1 = ImageIO.read(new ByteArrayInputStream(bufferImage));
+                        logger.info(WIDTH);
 //                        BufferedImage image2= ImageIO.read(new ByteArrayInputStream(imageResponse.getBufferImage()));
                         image1 = image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_FAST);
                         graphics = jPanel1.getGraphics();

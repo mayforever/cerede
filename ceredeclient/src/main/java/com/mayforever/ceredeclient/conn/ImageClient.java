@@ -383,16 +383,18 @@ public class ImageClient extends BaseThread
 //                        logger.debug("Chunk data receive"+data[data.length-2]+"<");
 //                        logger.debug("Chunk data receive"+data[data.length-1]+"<");
                         logger.debug("if "+chunkImageResponse.getChunkNumber()+"<");
+                        mapRecieverBufferImage.put(chunkImageResponse.getHash(), receiveBufferImage);
                         if(chunkImageResponse.getChunkNumber()==App.chunkCount-1){
                            
                             ImageRequest imageRequest = new ImageRequest();
         
                             imageRequest.setHash(chunkImageResponse.getHash());
                             imageRequest.setRequestorHash(chunkImageResponse.getRequestorHash());
-
+                            
     //                        this.loadingFrame.getjLprocess().s    etText("Sending Image Request To Server ...");
                             App.imageClient.sendImagePacket(imageRequest.toBytes());
                             logger.debug("Image Request Send"); 
+                            logger.info(receiveBufferImage.length);
                             RemoteViewer remoteViewer = App.mapRemoteViewer
                                     .get(chunkImageResponse.getHash());
                             remoteViewer.updateJScrollView(receiveBufferImage);
