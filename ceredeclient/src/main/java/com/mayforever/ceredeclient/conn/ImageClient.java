@@ -58,23 +58,30 @@ public class ImageClient extends BaseThread
 //    private RemoteViewer remoteViewer = null; 
     public ImageClient(){
         mapSendImageArrayList = new HashMap<>();
-        try{
+        logger = Logger.getLogger("IMAGECLIENT");
+        boolean isAlive = false;
+        while(!isAlive){
+            try{
             
-            this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
-        }catch (NullPointerException e){
-            logger.info("reconecting to server");
-            App.imageClient = new ImageClient();
-            logger.info("server reconnected sucessfuly");
-            try {
-                java.lang.Thread.sleep(3000);
-            } catch (InterruptedException ex) {
-//                java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
+                this.tcpClient.addListener(this);
+                logger.info("server reconnected sucessfuly");
+                isAlive = true;
+            }catch (NullPointerException e){
+                logger.info("reconecting to server");
+//                App.imageClient = new ImageClient();
+                
+                try {
+                    java.lang.Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+    //                java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
-            
         }
         
-        this.tcpClient.addListener(this);
-        logger = Logger.getLogger("IMAGECLIENT");
+//        this.tcpClient.addListener(this);
+        
         this.tcpClient.setAllocation(2048*5);
         dataProcess = new Queue<>();
         dataToValidate = new Queue<>();

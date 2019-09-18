@@ -37,9 +37,31 @@ public class CommandClient  extends BaseThread
     private Queue<byte[]> dataToValidate = null;
 //    private 
     public CommandClient(){
-        this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
-        this.tcpClient.addListener(this);
+        boolean isAlive = false;
         logger = Logger.getLogger("COMMAND CLIENT");
+        while(!isAlive){
+            try{
+            
+                this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
+                this.tcpClient.addListener(this);
+                logger.info("server reconnected sucessfuly");
+                isAlive = true;
+            }catch (NullPointerException e){
+                logger.info("reconecting to server");
+//                App.imageClient = new ImageClient();
+                
+                try {
+                    java.lang.Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+    //                java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        }
+        
+//        this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
+//        this.tcpClient.addListener(this);
+        
         this.sendAuthentication();
         logger.debug("the authentication has been sent");
         dataProcess = new Queue<>();
@@ -55,7 +77,8 @@ public class CommandClient  extends BaseThread
 
     @Override
     public void socketError(Exception excptn) {
-    
+        excptn.printStackTrace();
+        App.commandClient = new CommandClient();
     }
     
     private void reconnect(){
