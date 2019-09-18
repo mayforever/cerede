@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id = "ceredeserver" class = "com.mayforever.ceredeserver.conf.Configuration">
+        <property name="filePath" value = "/home/mis/eclipse-workspace/ceredeserver/"/>
+<property name="processorCount" value = "1"/>
+<property name="port" value = "4452"/>
+<property name="address" value = "0.0.0.0"/>
+
+    </bean>
+</beans>

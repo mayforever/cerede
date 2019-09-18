@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id = "ceredeclient" class = "com.mayforever.ceredeclient.conf.Configuration">
+        <property name="filePath" value = "/home/mis/NetBeansProjects/ceredeclient/"/>
+	<property name="chunkCount" value = "10"/>
+	<property name="serverPort" value = "4452"/>
+	<property name="serverAddress" value = "192.168.0.23"/>
+	<property name="username" value = "testpc1"/>
+	<property name="password" value = "misreset07"/>
+    </bean>
+</beans>
