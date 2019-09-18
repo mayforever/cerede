@@ -6,8 +6,8 @@
 **ceredeserver** is the serverside of this project. it handled username, password, address, and command of every client.
 
 Requirements :
-*optional: port forwading certain ip. if you want to use it in wan
-*configure **"conf/ceredeserver.conf.xml"**. 
+* optional: port forwading certain ip. if you want to use it in wan
+* configure **"conf/ceredeserver.conf.xml"**. 
 	* **filePath** - the path of project.
 	* **processorCount** - how many thread waiting for process.
 	* **port** - port you use.
@@ -36,7 +36,7 @@ Sample:
 **ceredeclient** this is the client side that comunicate to the server. this need to install in every pc we want to control or use to control. 
 
 Requirement
-*configure **"conf/ceredeserver.conf.xml"**. 
+* configure **"conf/ceredeserver.conf.xml"**. 
 	* **filePath** - the path of project.
 	* **chunkCount** - I encounter error in bytebuffer in different os. it depends upon so I sudgest, chunkCount => 5.
 	* **serverPort** - the port of the server.
