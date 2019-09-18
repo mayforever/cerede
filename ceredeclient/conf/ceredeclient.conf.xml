@@ -10,6 +10,6 @@
 	<property name="serverPort" value = "4452"/>
 	<property name="serverAddress" value = "192.168.0.23"/>
 	<property name="username" value = "testpc1"/>
-	<property name="password" value = "misreset07"/>
+	<property name="password" value = "password"/>
     </bean>
 </beans>
