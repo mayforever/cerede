@@ -54,7 +54,8 @@ public class ImageClient extends BaseThread
     private SessionRecieveMonitor sessionCleaner = null;
     private HashMap<String, byte[]> mapTempData = null;
     private HashMap<String, ArrayList<byte[]>> mapSendImageArrayList = null;
-    private byte[] receiveBufferImage = null;
+//    private byte[] receiveBufferImage = null;
+    private HashMap<String, byte[]> mapRecieverBufferImage = null;
 //    private RemoteViewer remoteViewer = null; 
     public ImageClient(){
         mapSendImageArrayList = new HashMap<>();
@@ -65,10 +66,10 @@ public class ImageClient extends BaseThread
             
                 this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
                 this.tcpClient.addListener(this);
-                logger.info("server reconnected sucessfuly");
+                logger.debug("server reconnected sucessfuly");
                 isAlive = true;
             }catch (NullPointerException e){
-                logger.info("reconecting to server");
+                logger.debug("reconecting to server");
 //                App.imageClient = new ImageClient();
                 
                 try {
@@ -86,7 +87,8 @@ public class ImageClient extends BaseThread
         dataProcess = new Queue<>();
         dataToValidate = new Queue<>();
         new Processor();
-        receiveBufferImage = new byte[0];
+//        receiveBufferImage = new byte[0];
+        mapRecieverBufferImage = new HashMap<>();
         logger.debug("the authentication has been sent");
 //        this.remoteViewer = remoteViewer;
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -178,7 +180,7 @@ public class ImageClient extends BaseThread
 				byte[] newtempData = new byte[tempData.length - dataProcessSize];
 				System.arraycopy(tempData, dataProcessSize, newtempData, 0,  tempData.length - dataProcessSize);
 				this.tempData = newtempData;
-				logger.info("newtempData length : " + newtempData.length);
+				logger.debug("newtempData length : " + newtempData.length);
 			}
 			logger.debug("tempData length : " + tempData.length);
 			if(this.tempData.length < 5) {
@@ -320,7 +322,7 @@ public class ImageClient extends BaseThread
                                 RemoteViewer remoteViewer = App.mapRemoteViewer
                                      .get(imageResponse.getHash());
                                 remoteViewer.updateJScrollViewSize(imageResponse);
-                                 logger.info("if "+remoteViewer.chunkIndex+"<"+ App.chunkCount);
+                                 logger.debug("if "+remoteViewer.chunkIndex+"<"+ App.chunkCount);
                                 if(remoteViewer.chunkIndex< App.chunkCount){
                                     ChunkImageRequest chunkImageRequest = new ChunkImageRequest();
                                     chunkImageRequest.setRequestorHash(imageResponse.getRequestorHash());
@@ -364,7 +366,10 @@ public class ImageClient extends BaseThread
                         updateLastSessionDate();
                         ChunkImageResponse chunkImageResponse = new ChunkImageResponse();
                         chunkImageResponse.fromBytes(data);
-                        
+                        if(!mapRecieverBufferImage.containsKey(chunkImageResponse.getHash())){
+                            mapRecieverBufferImage.put(chunkImageResponse.getHash(), new byte[0]);
+                        }
+                        byte[] receiveBufferImage = mapRecieverBufferImage.get(chunkImageResponse.getHash());
                         int oldBufferSize = receiveBufferImage.length;
                         byte[] bufferImageChunk = chunkImageResponse.getBufferImage();
                         byte[] oldReceiveBufferImage = receiveBufferImage;
@@ -387,12 +392,13 @@ public class ImageClient extends BaseThread
 
     //                        this.loadingFrame.getjLprocess().s    etText("Sending Image Request To Server ...");
                             App.imageClient.sendImagePacket(imageRequest.toBytes());
-                            logger.info("Image Request Send"); 
+                            logger.debug("Image Request Send"); 
                             RemoteViewer remoteViewer = App.mapRemoteViewer
                                     .get(chunkImageResponse.getHash());
                             remoteViewer.updateJScrollView(receiveBufferImage);
                             remoteViewer.chunkIndex = 0;
-                            receiveBufferImage = new byte[0];
+                            mapRecieverBufferImage.put(chunkImageResponse.getHash(), new byte[0]);
+//                            receiveBufferImage = new byte[0];
 //                            remoteViewer.chunkIndex = 0;
                         }else{
                             if(App.mapRemoteViewer
