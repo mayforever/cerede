@@ -115,7 +115,7 @@ public class ImageClient extends BaseThread
 
     @Override
     public void socketError(Exception excptn) {
-        
+        this.stopThread();
             excptn.printStackTrace();
             App.imageClient = new ImageClient();
       
@@ -149,7 +149,7 @@ public class ImageClient extends BaseThread
     @Override
     public void run() {
         while(this.getServiceState() == com.mayforever.thread.state.ServiceState.RUNNING) {
-            byte[] data;
+            byte[] data = null;
             try {
                 data = dataToValidate.get();
                 if (data != null) {
@@ -189,6 +189,9 @@ public class ImageClient extends BaseThread
 				dataProcessSize = BitConverter.bytesToInt(tempData, 1, ByteOrder.BIG_ENDIAN);
 			}
 			logger.debug("dataProcessSize length : " + dataProcessSize );
+                        if(tempData == null){
+                            logger.warn("tempData is empty");
+                        }
                     }while(tempData.length > dataProcessSize);
                 }
             } catch (InterruptedException e) {
@@ -272,11 +275,12 @@ public class ImageClient extends BaseThread
         @Override
         public void run() {
             while(this.getServiceState() == com.mayforever.thread.state.ServiceState.RUNNING) {
-            byte[] data;
+            byte[] data = null;
             try {
                 data = dataProcess.get();
                 if (data != null) {
 //                    System.out.println("data to process :" + Arrays.toString(data));
+                    
                     if(data[0] == 2) {
                        
                         ImageRequest imageRequest = new ImageRequest();
@@ -394,7 +398,7 @@ public class ImageClient extends BaseThread
     //                        this.loadingFrame.getjLprocess().s    etText("Sending Image Request To Server ...");
                             App.imageClient.sendImagePacket(imageRequest.toBytes());
                             logger.debug("Image Request Send"); 
-                            logger.info(receiveBufferImage.length);
+                            logger.debug(receiveBufferImage.length);
                             RemoteViewer remoteViewer = App.mapRemoteViewer
                                     .get(chunkImageResponse.getHash());
                             remoteViewer.updateJScrollView(receiveBufferImage);
@@ -417,6 +421,9 @@ public class ImageClient extends BaseThread
             } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
+            }catch (ArrayIndexOutOfBoundsException eiobe){
+//                eiobe.printStackTrace();
+                socketError(eiobe);
             }
         }
         }

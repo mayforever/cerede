@@ -172,7 +172,7 @@ public class RemoteViewer extends javax.swing.JFrame
                         
                         
                         image1 = ImageIO.read(new ByteArrayInputStream(bufferImage));
-                        logger.info(WIDTH);
+                        logger.debug(WIDTH);
 //                        BufferedImage image2= ImageIO.read(new ByteArrayInputStream(imageResponse.getBufferImage()));
                         image1 = image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_FAST);
                         graphics = jPanel1.getGraphics();
@@ -245,7 +245,7 @@ public class RemoteViewer extends javax.swing.JFrame
         chunkImageRequest.setProtocol((byte)4);
         if(chunkIndex<App.chunkCount){
             App.imageClient.sendImagePacket(chunkImageRequest.toBytes());
-            logger.info("if "+chunkIndex+"<"+ App.chunkCount);
+            logger.debug("if "+chunkIndex+"<"+ App.chunkCount);
         }
         
         chunkIndex++;
@@ -335,7 +335,7 @@ public class RemoteViewer extends javax.swing.JFrame
         commandRequest.setRequestorHash(App.hash);
         int[] params = {mouseX, mouseY};
         commandRequest.setParams(params);
-//        logger.info(commandRequest.toBytes());
+//        logger.debug(commandRequest.toBytes());
         try {
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
