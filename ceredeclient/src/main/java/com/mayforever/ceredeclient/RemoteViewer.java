@@ -138,7 +138,7 @@ public class RemoteViewer extends javax.swing.JFrame
         
         imageRequest.setHash(hash);
         imageRequest.setRequestorHash(App.hash);
-        
+        imageRequest.setTotalChunk(App.chunkCount);
         this.loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
         App.imageClient.sendImagePacket(imageRequest.toBytes());
         this.updateLastSessionDate();
@@ -184,7 +184,7 @@ public class RemoteViewer extends javax.swing.JFrame
                          graphics.drawImage(image1, 0, 0, WIDTH,HEIGHT, jPanel1);
 //                        getjScrollPane1().setViewportView(getjPanel1());
 ////                        ImageIO.write(image2, "jpeg", new File("/home/mis/output.jpg"));
-//                        getjScrollPane1().validate();
+                        getjScrollPane1().validate();
 //                        getjScrollPane1().repaint();
                         this.updateLastSessionDate();
                     } catch (IOException ex) {
@@ -526,7 +526,7 @@ public class RemoteViewer extends javax.swing.JFrame
         
                         imageRequest.setHash(hash);
                         imageRequest.setRequestorHash(App.hash);
-                        
+                        imageRequest.setTotalChunk(App.chunkCount);
 //                        loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
                         App.imageClient.sendImagePacket(imageRequest.toBytes());
                     }

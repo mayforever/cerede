@@ -21,7 +21,7 @@ public class ChunkImageResponse extends BaseClass{
         this.setBufferSize(bufferImage.length);
         this.setRequestorHashSize(requestorHash.length());
         this.setHashSize(hash.length());
-        this.setTotalSize(bufferSize+1+4+4+requestorHashSize+4+1+4+hashSize+4+4);
+        this.setTotalSize(bufferSize+1+4+4+requestorHashSize+4+4+hashSize+1+4+4);
         byte[] data = new byte[this.getTotalSize()];
         int index = 0;
 

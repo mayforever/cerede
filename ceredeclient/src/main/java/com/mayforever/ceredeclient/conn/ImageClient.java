@@ -294,7 +294,7 @@ public class ImageClient extends BaseThread
                         imageResponse.setHeight(getHeight());
                         imageResponse.setWidth(getWidth());
                         
-                        sendArraylistImage = chunckData(gettingScreenShot(), App.chunkCount);
+                        sendArraylistImage = chunckData(gettingScreenShot(), imageRequest.getTotalChunk());
                         mapSendImageArrayList.put(imageRequest.getRequestorHash(), sendArraylistImage);
                         byte[] dataToSend = null;
                         try {
@@ -343,7 +343,7 @@ public class ImageClient extends BaseThread
 
                                     imageRequest.setHash(imageResponse.getHash());
                                     imageRequest.setRequestorHash(imageResponse.getRequestorHash());
-
+                                    imageRequest.setTotalChunk(App.chunkCount);
     //                                this.loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
                                     App.imageClient.sendImagePacket(imageRequest.toBytes());
                                 }
@@ -370,6 +370,7 @@ public class ImageClient extends BaseThread
                         logger.debug("Image Response Receive");
                         updateLastSessionDate();
                         ChunkImageResponse chunkImageResponse = new ChunkImageResponse();
+//                        logger.info(data.length);
                         chunkImageResponse.fromBytes(data);
                         if(!mapRecieverBufferImage.containsKey(chunkImageResponse.getHash())){
                             mapRecieverBufferImage.put(chunkImageResponse.getHash(), new byte[0]);
@@ -395,7 +396,7 @@ public class ImageClient extends BaseThread
         
                             imageRequest.setHash(chunkImageResponse.getHash());
                             imageRequest.setRequestorHash(chunkImageResponse.getRequestorHash());
-                            
+                            imageRequest.setTotalChunk(App.chunkCount);
     //                        this.loadingFrame.getjLprocess().s    etText("Sending Image Request To Server ...");
                             App.imageClient.sendImagePacket(imageRequest.toBytes());
                             logger.debug("Image Request Send"); 
