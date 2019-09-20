@@ -7,6 +7,7 @@ package com.mayforever.ceredeserver.model;
 
 import com.mayforever.tools.BitConverter;
 import java.nio.ByteOrder;
+// import java.util.ArrayList;
 
 /**
  *
@@ -20,7 +21,7 @@ public class ChunkImageResponse extends BaseClass{
         this.setBufferSize(bufferImage.length);
         this.setRequestorHashSize(requestorHash.length());
         this.setHashSize(hash.length());
-        this.setTotalSize(bufferSize+1+4+4+requestorHashSize+4+1+4+hashSize+4);
+        this.setTotalSize(bufferSize+1+4+4+requestorHashSize+4+4+hashSize+1+4+4);
         byte[] data = new byte[this.getTotalSize()];
         int index = 0;
 
@@ -52,6 +53,9 @@ public class ChunkImageResponse extends BaseClass{
         System.arraycopy(BitConverter.intToBytes(chunkNumber, ByteOrder.BIG_ENDIAN),
                         0, data, index, 4);
         index+=4;
+        System.arraycopy(BitConverter.intToBytes(totalChunk, ByteOrder.BIG_ENDIAN),
+                        0, data, index, 4);
+        index+=4;
         return data;
     }
 
@@ -81,6 +85,8 @@ public class ChunkImageResponse extends BaseClass{
         this.setResult(data[index]);
         index++;
         this.chunkNumber = BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN);
+        index+=4;
+        this.totalChunk = BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN);
         index+=4;
     }
 
@@ -148,6 +154,15 @@ public class ChunkImageResponse extends BaseClass{
     private String hash = "";
     private int hashSize = 0;
     private int chunkNumber = 0;
+    private int totalChunk = 0;
+
+    public int getTotalChunk() {
+        return totalChunk;
+    }
+
+    public void setTotalChunk(int totalChunk) {
+        this.totalChunk = totalChunk;
+    }
 
     public int getChunkNumber() {
         return chunkNumber;

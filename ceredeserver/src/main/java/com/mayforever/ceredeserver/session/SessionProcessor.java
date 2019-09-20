@@ -129,8 +129,10 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 						
 						if(Launcher.controllerMap.containsKey(chunkImageResponse.getRequestorHash())) {
 							try {
-								Launcher.controllerMap.get(chunkImageResponse.getRequestorHash()).getTcpImageClient()
+								synchronized (Launcher.controllerMap.get(chunkImageResponse.getRequestorHash())) {
+									Launcher.controllerMap.get(chunkImageResponse.getRequestorHash()).getTcpImageClient()
 									.getTcpClient().sendPacket(chunkImageResponse.toBytes());
+								}
 //								logger.debug("Image Response Send to requestor");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block

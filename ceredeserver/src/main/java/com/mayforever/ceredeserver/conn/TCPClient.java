@@ -103,6 +103,7 @@ public class TCPClient
 			try {
 				data = this.dataRecieveQueue.get();
 				if (data != null) {
+					
                   if (tempData == null || tempData.length  == 0) {
                 	  tempData = data;
                   }else {
@@ -111,7 +112,10 @@ public class TCPClient
                           System.arraycopy(dataPending, 0, tempData, 0, dataPending.length);
                           System.arraycopy(data, 0, tempData, dataPending.length, data.length);
                   }
-
+                  if (tempData.length > 1000000) {
+//						this.tcpClient.disconnect();
+						logger.warn("Overload Data");
+					}
                   logger.debug(tempData.length);
                   int dataProcessSize = BitConverter.bytesToInt(tempData, 1, ByteOrder.BIG_ENDIAN);
 

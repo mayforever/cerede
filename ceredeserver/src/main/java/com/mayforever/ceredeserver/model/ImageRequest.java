@@ -28,7 +28,15 @@ public class ImageRequest extends BaseClass{
     public int getRequestorHashSize() {
         return requestorHashSize;
     }
+    private int totalChunk;
 
+    public int getTotalChunk() {
+        return totalChunk;
+    }
+
+    public void setTotalChunk(int totalChunk) {
+        this.totalChunk = totalChunk;
+    }
 //    public int getWidth() {
 //        return width;
 //    }
@@ -43,7 +51,7 @@ public class ImageRequest extends BaseClass{
             // TODO Auto-generated method stub
             this.hashSize = hash.length();
             this.requestorHashSize = requestorHash.length();
-            this.setTotalSize(hashSize+requestorHashSize+1+4+4+4);
+            this.setTotalSize(hashSize+requestorHashSize+1+4+4+4+4);
             byte[] data = new byte[this.getTotalSize()];
             int index = 0;
             data[index] = (byte)2;
@@ -61,6 +69,9 @@ public class ImageRequest extends BaseClass{
             index+=4;
             System.arraycopy(requestorHash.getBytes(), 0, data, index, requestorHash.length());
             index+=requestorHash.length();
+            System.arraycopy(BitConverter.intToBytes(totalChunk, ByteOrder.BIG_ENDIAN),
+                            0, data, index, 4);
+            index+=4;
 //            data[index] = this.getControl();
 //            index++;
             return data;
@@ -82,6 +93,8 @@ public class ImageRequest extends BaseClass{
             index+=4;
             this.setRequestorHash(new java.lang.String(data, index, requestorHashSize));
             index+=requestorHashSize;
+            this.setTotalChunk(BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN));
+            index+=4;
 //            this.setControl(data[index]);
 //            index++;
     }
