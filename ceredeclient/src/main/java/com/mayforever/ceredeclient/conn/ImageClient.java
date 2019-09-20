@@ -360,6 +360,7 @@ public class ImageClient extends BaseThread
                         chunkImageResponse.setRequestorHash(chunkImageRequest.getRequestorHash());
                         chunkImageResponse.setBufferImage(mapSendImageArrayList
                                 .get(chunkImageRequest.getRequestorHash()).get(chunkImageRequest.getChunkNumber()));
+                        chunkImageResponse.setTotalChunk(App.chunkCount);
 //                        chunkImageResponse.setBufferImage(sendArraylistImage.get(chunkImageRequest.getChunkNumber()));
                         chunkImageResponse.setChunkNumber(chunkImageRequest.getChunkNumber());
                         chunkImageResponse.setProtocol((byte)5);
@@ -388,7 +389,7 @@ public class ImageClient extends BaseThread
 //                        logger.debug("Chunk data receive"+data[data.length-1]+"<");
                         logger.debug("if "+chunkImageResponse.getChunkNumber()+"<");
                         mapRecieverBufferImage.put(chunkImageResponse.getHash(), receiveBufferImage);
-                        if(chunkImageResponse.getChunkNumber()==App.chunkCount-1){
+                        if(chunkImageResponse.getChunkNumber() == chunkImageResponse.getTotalChunk()-1){
                            
                             ImageRequest imageRequest = new ImageRequest();
         

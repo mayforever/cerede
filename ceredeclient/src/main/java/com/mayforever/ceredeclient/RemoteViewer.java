@@ -498,7 +498,7 @@ public class RemoteViewer extends javax.swing.JFrame
         SessionSendMonitor(){
             this.startThread();
         }
-        
+        int sessionLimit = 5;
         public void stopSenderMonitor()
         {
             this.stopThread();
@@ -515,12 +515,18 @@ public class RemoteViewer extends javax.swing.JFrame
                     int diffsec = (int) (timeDiff / (1000));
 //                    System.out.println("diffSex " + diffsec);
                     if(diffsec >= 5){
-                        System.out.println("Request Timeout Create Another Image Request");
+                        sessionLimit--;
+                        if(sessionLimit == 0){
+                            App.imageClient.socketError(new Exception("Broken Peer Error"));
+                            logger.warn("Peer is Broken");
+                            sessionLimit = 5;
+                        }
+                        logger.info("Request Timeout Create Another Image Request");
                         ImageRequest imageRequest = new ImageRequest();
         
                         imageRequest.setHash(hash);
                         imageRequest.setRequestorHash(App.hash);
-
+                        
 //                        loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
                         App.imageClient.sendImagePacket(imageRequest.toBytes());
                     }
@@ -535,6 +541,7 @@ public class RemoteViewer extends javax.swing.JFrame
         Date date = new Date();
         lastImageDataTimeProcess = date.getTime();
     }
+    
     
     /**
      * @param args the command line arguments
