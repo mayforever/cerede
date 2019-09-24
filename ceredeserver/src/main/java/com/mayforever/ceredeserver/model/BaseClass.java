@@ -18,13 +18,4 @@ public abstract class BaseClass implements Base{
 	public void setProtocol(byte protocol) {
 		this.protocol = protocol;
 	}
-//	private int size = 0;
-//	public int getSize() {
-//		return size;
-//	}
-//
-//	public void setSize(int sizeOfImages) {
-//		this.size = sizeOfImages;
-//	}
-	
 }

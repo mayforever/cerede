@@ -5,11 +5,10 @@ import java.nio.ByteOrder;
 import com.mayforever.tools.BitConverter;
 
 public class ImageResponse extends BaseClass{
-//	private byte[] bufferImage = null;
+
 	private String requestorHash = "";
 	private int requestorHashSize = 0;
-//	private int totalSize = 0;
-//	private int bufferSize = 0;
+
 	private byte result = 0;
         private int chunkCount = 0;
 

@@ -8,8 +8,7 @@ import com.mayforever.ceredeserver.conn.TCPClient;
 public class TCPData 	{
 	
 	public TCPData (String user, String password) {
-//		this.ascCommandReceiver = ascCommand;
-//		this.ascImageReceiver = ascImage;
+
 		this.user = user;
 		this.password = password;
 	}
@@ -40,14 +39,10 @@ public class TCPData 	{
 	}
 	private String user = null;
 	private String password = null;
-//	private TCPClient tcpImageReceiver = null;
-//	private TCPClient tcpCommandReceiver = null;
+
 	
 	private TCPClient tcpImageClient = null;
 	private TCPClient tcpCommandListener = null;
 	
-//	public void deleteToMap() {
-//		String hash = Launcher.toHash(user+password);
-//		Launcher.controllerMap.remove(hash);
-//	}
+
 }

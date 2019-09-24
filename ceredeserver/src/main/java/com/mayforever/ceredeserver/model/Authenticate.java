@@ -56,7 +56,6 @@ public class Authenticate extends BaseClass {
 		index+=4;
 		this.setPassword(new java.lang.String(data, index, passwordSize));
 		index+=passwordSize;
-//		this.setPasswordSize(data.length-9);
 		this.usernameSize = BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN);
 		index+=4;
 		this.setUsername(new java.lang.String(data, index, usernameSize));

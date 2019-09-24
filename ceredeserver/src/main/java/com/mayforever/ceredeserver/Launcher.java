@@ -14,7 +14,6 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import com.mayforever.ceredeserver.conf.Configuration;
 import com.mayforever.ceredeserver.conn.TCPServer;
 import com.mayforever.ceredeserver.conn.data.TCPData;
-import com.mayforever.ceredeserver.session.SessionManager;
 import com.mayforever.ceredeserver.session.SessionProcessor;
 import com.mayforever.queue.Queue;
 
@@ -28,7 +27,6 @@ public class Launcher
 
 	public static Configuration config = null;
 	public static HashMap<String, TCPData> controllerMap = null;  
-	public static SessionManager sessionManager = null;
 	public static Logger logger = Logger.getLogger("MAIN");
 	public static String logsConfigPath = "";
 	public static Queue<byte[]> dataProcess = null;
@@ -91,7 +89,6 @@ public class Launcher
                 sb.append(String.format("%02x", b));
             }
             hash = sb.toString();
-//             System.out.println("remote hash : " + hash);
         } catch (NoSuchAlgorithmException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

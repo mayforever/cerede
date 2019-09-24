@@ -23,13 +23,11 @@ public class TCPClient
 
 	AsynchronousSocketChannel asc = null;
 	private Queue<byte[]> dataRecieveQueue = null;
-//	private byte[] pendingData = null;
 	private Logger logger = Logger.getLogger("TCPClient");
 	private String hash = null;
 	
 	public TCPClient(AsynchronousSocketChannel asc) {
 		this.dataRecieveQueue = new Queue<>();
-//		this.hash = hash;
 		this.asc = asc;
 		this.tcpClient = new com.mayforever.network.newtcp.TCPClient(asc);
 		this.tcpClient.addListener(this); 
@@ -112,10 +110,7 @@ public class TCPClient
                           System.arraycopy(dataPending, 0, tempData, 0, dataPending.length);
                           System.arraycopy(data, 0, tempData, dataPending.length, data.length);
                   }
-                  if (tempData.length > 1000000) {
-//						this.tcpClient.disconnect();
-						logger.warn("Overload Data");
-					}
+                 
                   logger.debug(tempData.length);
                   int dataProcessSize = BitConverter.bytesToInt(tempData, 1, ByteOrder.BIG_ENDIAN);
 

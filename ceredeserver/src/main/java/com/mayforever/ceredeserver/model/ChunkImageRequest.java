@@ -39,8 +39,7 @@ public class ChunkImageRequest extends BaseClass{
         System.arraycopy(BitConverter.intToBytes(chunkNumber, ByteOrder.BIG_ENDIAN),
                         0, data, index, 4);
         index+=4;
-//            data[index] = this.getControl();
-//            index++;
+
         return data;
     }
 
@@ -55,7 +54,6 @@ public class ChunkImageRequest extends BaseClass{
         index+=4;
         this.setHash(new java.lang.String(data, index, hashSize));
         index+=hashSize;
-//		this.sethashSize(data.length-9);
         this.requestorHashSize = BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN);
         index+=4;
         this.setRequestorHash(new java.lang.String(data, index, requestorHashSize));
@@ -81,13 +79,6 @@ public class ChunkImageRequest extends BaseClass{
         this.requestorHashSize = requestorHashSize;
     }
 
-//    public int getBufferSize() {
-//        return bufferSize;
-//    }
-//
-//    public void setBufferSize(int bufferSize) {
-//        this.bufferSize = bufferSize;
-//    }
 
     public byte getResult() {
         return result;
@@ -112,7 +103,7 @@ public class ChunkImageRequest extends BaseClass{
     public void setHashSize(int hashSize) {
         this.hashSize = hashSize;
     }
-//    private byte[] bufferImage = null;
+
     private String requestorHash = "";
     private int requestorHashSize = 0;
     private int chunkNumber = 0;

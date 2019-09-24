@@ -13,12 +13,7 @@ public class TCPServer implements com.mayforever.network.newtcp.ServerListener{
 	
 	public void acceptSocket(AsynchronousSocketChannel arg0) {
 		// TODO Auto-generated method stub
-//		try {
-//			System.out.println(arg0.getRemoteAddress().toString());
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
 		new TCPClient(arg0);
 	}
 

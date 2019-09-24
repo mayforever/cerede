@@ -19,7 +19,6 @@ public class ImageRequest extends BaseClass{
         
 	private int requestorHashSize = 0;
 	private int hashSize = 0;
-//	private byte control = 0;
 
     public String getHash() {
         return hash;
@@ -37,16 +36,7 @@ public class ImageRequest extends BaseClass{
     public void setTotalChunk(int totalChunk) {
         this.totalChunk = totalChunk;
     }
-//    public int getWidth() {
-//        return width;
-//    }
-//
-//    public int getHeight() {
-//        return height;
-//    }
-//    private int width = 0;
-//    private int height = 0;
-//	private int totalSize = 0;
+
     public byte[] toBytes() {
             // TODO Auto-generated method stub
             this.hashSize = hash.length();

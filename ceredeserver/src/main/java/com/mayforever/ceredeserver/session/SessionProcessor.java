@@ -20,9 +20,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 		logger = Logger.getLogger("SessionProcessor");
 	}
 	
-	SessionProcessor(SessionManager sessionManager){
-
-	}
 	
 	public void startSession(){	
 		this.startThread();
@@ -60,7 +57,7 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 							imageResponse.setRequestorHash(imageRequest.getRequestorHash());
 							imageResponse.setWidth(0);
 							imageResponse.setHeight(0);
-//							imageResponse.setBufferImage(new byte[0]);
+
 							imageResponse.setResult((byte)1);
 							logger.debug("Image Response Send");
 							try {
@@ -70,7 +67,7 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-//							Launcher.controllerMap.get(imageResponse.getRequestorHash()).deleteToMap();
+
 						}
 					}
 					else if(data[0] == 3){
@@ -78,12 +75,10 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 						ImageResponse imageResponse = new ImageResponse();
 						imageResponse.fromBytes(data);
 						
-//						logger.debug("Image Buffer : "+new java.lang.String(imageResponse.getBufferImage()));
 						if(Launcher.controllerMap.containsKey(imageResponse.getRequestorHash())) {
 							try {
 								Launcher.controllerMap.get(imageResponse.getRequestorHash()).getTcpImageClient()
 									.getTcpClient().sendPacket(imageResponse.toBytes());
-//								logger.debug("Image Response Send to requestor");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -94,7 +89,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 							imageResponse.setRequestorHash(imageResponse.getRequestorHash());
 							imageResponse.setWidth(0);
 							imageResponse.setHeight(0);
-//							imageResponse.setBufferImage(new byte[0]);
 							imageResponse.setResult((byte)2);
 							
 							logger.debug("Message Response Send");
@@ -105,7 +99,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-//							Launcher.controllerMap.get(imageResponse.getRequestorHash()).deleteToMap();
 						}
 					}
 					else if(data[0] == 4){
@@ -116,7 +109,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 							try {
 								Launcher.controllerMap.get(chunkImageRequest.getHash()).getTcpImageClient()
 									.getTcpClient().sendPacket(chunkImageRequest.toBytes());
-//								logger.debug("Image Response Send to requestor");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -133,7 +125,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 									Launcher.controllerMap.get(chunkImageResponse.getRequestorHash()).getTcpImageClient()
 									.getTcpClient().sendPacket(chunkImageResponse.toBytes());
 								}
-//								logger.debug("Image Response Send to requestor");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -153,7 +144,6 @@ public class SessionProcessor extends com.mayforever.thread.BaseThread{
 										.getTcpClient().sendPacket(commandRequest.toBytes());
 								}
 								
-//								logger.debug("Image Response Send to requestor");
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

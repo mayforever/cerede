@@ -108,7 +108,6 @@ public class CommandRequest extends BaseClass{
 		index+=4;
 		this.setHash(new java.lang.String(data, index, hashSize));
 		index+=hashSize;
-//		this.sethashSize(data.length-9);
 		this.requestorHashSize = BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN);
 		index+=4;
 		this.setRequestorHash(new java.lang.String(data, index, requestorHashSize));
@@ -119,7 +118,6 @@ public class CommandRequest extends BaseClass{
 			al.add(BitConverter.bytesToInt(data, index, ByteOrder.BIG_ENDIAN));
 			index+=4;
 		}while(index!=data.length);
-//		this.params = al.toArray();
 		this.params = new int[al.size()];
 		for(int i = 0;i < al.size();i++) {
 			this.params[i] = al.get(i);
