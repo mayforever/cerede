@@ -76,7 +76,7 @@ public class CeredeForm extends javax.swing.JFrame implements Runnable, ActionLi
 
         jLabel2.setText("Password :");
 
-        jtUser.setText("testpc1");
+        jtUser.setText("mis");
 
         jptPassword.setText("misreset07");
 

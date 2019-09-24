@@ -115,10 +115,11 @@ public class ImageClient extends BaseThread
 
     @Override
     public void socketError(Exception excptn) {
-        this.stopThread();
-            excptn.printStackTrace();
+            this.stopThread();
+            
+//            this.tcpClient.disconnect();
             App.imageClient = new ImageClient();
-      
+            excptn.printStackTrace();
     }
     private void sendAuthentication(){
         Authenticate authenticate = new Authenticate();
@@ -217,7 +218,7 @@ public class ImageClient extends BaseThread
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] baosArrays = null;
 			try {
-				ImageIO.write(capture, "jpeg", baos);
+				ImageIO.write(capture, "png", baos);
 				baos.flush();
 //				imageResponse.setBufferImage(baos.toByteArray());
 				bufferImage = baos.toByteArray();
@@ -289,7 +290,7 @@ public class ImageClient extends BaseThread
                         ImageResponse imageResponse = new ImageResponse();
                         imageResponse.setRequestorHash(imageRequest.getRequestorHash());
                         imageResponse.setHash(imageRequest.getHash());
-                        imageResponse.setChunkCount(App.chunkCount);
+                        imageResponse.setChunkCount(imageRequest.getTotalChunk());
                         imageResponse.setResult((byte)0);
                         imageResponse.setHeight(getHeight());
                         imageResponse.setWidth(getWidth());
@@ -326,8 +327,8 @@ public class ImageClient extends BaseThread
                                 RemoteViewer remoteViewer = App.mapRemoteViewer
                                      .get(imageResponse.getHash());
                                 remoteViewer.updateJScrollViewSize(imageResponse);
-                                 logger.debug("if "+remoteViewer.chunkIndex+"<"+ App.chunkCount);
-                                if(remoteViewer.chunkIndex< App.chunkCount){
+                                logger.debug("if "+remoteViewer.chunkIndex+"<"+ imageResponse.getChunkCount());
+                                if(remoteViewer.chunkIndex< imageResponse.getChunkCount()){
                                     ChunkImageRequest chunkImageRequest = new ChunkImageRequest();
                                     chunkImageRequest.setRequestorHash(imageResponse.getRequestorHash());
                                     chunkImageRequest.setHash(imageResponse.getHash());
@@ -390,7 +391,7 @@ public class ImageClient extends BaseThread
 //                        logger.debug("Chunk data receive"+data[data.length-1]+"<");
                         logger.debug("if "+chunkImageResponse.getChunkNumber()+"<");
                         mapRecieverBufferImage.put(chunkImageResponse.getHash(), receiveBufferImage);
-                        if(chunkImageResponse.getChunkNumber() == chunkImageResponse.getTotalChunk()-1){
+                        if(chunkImageResponse.getChunkNumber() == App.chunkCount-1){
                            
                             ImageRequest imageRequest = new ImageRequest();
         

@@ -27,6 +27,9 @@ import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -157,41 +160,24 @@ public class RemoteViewer extends javax.swing.JFrame
     public void updateJScrollView(byte[] bufferImage){
             
                     try {
-//                        logger.debug("Processing image Response...");
-//                        if((WIDTH != imageResponse.getWidth()) && (HEIGHT != imageResponse.getHeight())){
-//                            getjPanel1().setPreferredSize(new Dimension(imageResponse.getWidth(),imageResponse.getHeight()));
-//                            WIDTH = imageResponse.getWidth();
-//                            HEIGHT = imageResponse.getHeight();
-//                            logger.debug("device size set" );
-//                            getjScrollPane1().setViewportView(getjPanel1());
-//                            getjScrollPane1().validate();
-//                        }
-                        
-                        //             this.screenLoader.getScreenView().setSize(screenSize.getWidth(), screenSize.getHeight());
-                        //             controlFrame.getjPanel1().add(this.screenLoader.getScreenView());
-                        
-                        
-                        image1 = ImageIO.read(new ByteArrayInputStream(bufferImage));
-                        logger.debug(WIDTH);
+
+                        ByteArrayInputStream in = new ByteArrayInputStream(bufferImage);
+                        DataInputStream dos= new DataInputStream(in);
+//                        dos.flush();
+                        image1 = ImageIO.read(dos);
 //                        BufferedImage image2= ImageIO.read(new ByteArrayInputStream(imageResponse.getBufferImage()));
-                        image1 = image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_FAST);
+                        image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_SMOOTH);
                         graphics = jPanel1.getGraphics();
-//                        try{
-//                           
-//                        }catch(NullPointerException npe){
-//                            
-//                        }
+
                          graphics.drawImage(image1, 0, 0, WIDTH,HEIGHT, jPanel1);
-//                        getjScrollPane1().setViewportView(getjPanel1());
-////                        ImageIO.write(image2, "jpeg", new File("/home/mis/output.jpg"));
-                        getjScrollPane1().validate();
-//                        getjScrollPane1().repaint();
+
                         this.updateLastSessionDate();
                     } catch (IOException ex) {
-                        ex.printStackTrace();
-                    } catch(Exception e){
-                        e.printStackTrace();
+//                        ex.printStackTrace();
                         
+                    }catch(Exception e){
+                        e.printStackTrace();
+//                        App.imageClient.socketError(e);
                     }
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                
@@ -210,32 +196,6 @@ public class RemoteViewer extends javax.swing.JFrame
             getjScrollPane1().setViewportView(getjPanel1());
             getjScrollPane1().validate();
         }
-
-        //             this.screenLoader.getScreenView().setSize(screenSize.getWidth(), screenSize.getHeight());
-        //             controlFrame.getjPanel1().add(this.screenLoader.getScreenView());
-
-        
-//        logger.debug("if "+chunkIndex+"<"+ App.chunkCount);
-//        if(chunkIndex< App.chunkCount){
-//            ChunkImageRequest chunkImageRequest = new ChunkImageRequest();
-//            chunkImageRequest.setRequestorHash(imageResponse.getRequestorHash());
-//            chunkImageRequest.setHash(imageResponse.getHash());
-//            chunkImageRequest.setChunkNumber(chunkIndex);
-//            chunkImageRequest.setProtocol((byte)4);
-//            
-//            App.imageClient.sendImagePacket(chunkImageRequest.toBytes());
-//            chunkIndex++;
-//        }else{
-//            chunkIndex = 0;
-//            ImageRequest imageRequest = new ImageRequest();
-//        
-//            imageRequest.setHash(hash);
-//            imageRequest.setRequestorHash(App.hash);
-//
-//            this.loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
-//            App.imageClient.sendImagePacket(imageRequest.toBytes());
-//        }   
-        
     }
     public void sendChunkImageRequest(ChunkImageResponse chunkImageResponse){
         ChunkImageRequest chunkImageRequest = new ChunkImageRequest();
