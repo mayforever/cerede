@@ -54,9 +54,7 @@ public class ImageClient extends BaseThread
     private SessionRecieveMonitor sessionCleaner = null;
     private HashMap<String, byte[]> mapTempData = null;
     private HashMap<String, ArrayList<byte[]>> mapSendImageArrayList = null;
-//    private byte[] receiveBufferImage = null;
     private HashMap<String, byte[]> mapRecieverBufferImage = null;
-//    private RemoteViewer remoteViewer = null; 
     public ImageClient(){
         mapSendImageArrayList = new HashMap<>();
         logger = Logger.getLogger("IMAGECLIENT");
@@ -75,22 +73,19 @@ public class ImageClient extends BaseThread
                 try {
                     java.lang.Thread.sleep(3000);
                 } catch (InterruptedException ex) {
-    //                java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.warn("ERROR :"+ex.getMessage());
+                    ex.printStackTrace();
                 }
 
             }
         }
         
-//        this.tcpClient.addListener(this);
-        
         this.tcpClient.setAllocation(2048*5);
         dataProcess = new Queue<>();
         dataToValidate = new Queue<>();
         new Processor();
-//        receiveBufferImage = new byte[0];
         mapRecieverBufferImage = new HashMap<>();
         logger.debug("the authentication has been sent");
-//        this.remoteViewer = remoteViewer;
         GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
         try {
@@ -108,16 +103,14 @@ public class ImageClient extends BaseThread
     
     @Override
     public void packetData(byte[] data) {
-//        tempData = null;
-//        logger.debug("Data to process pending :"+Arrays.toString(data));
+
 	this.dataToValidate.add(data);
     }
 
     @Override
     public void socketError(Exception excptn) {
             this.stopThread();
-            
-//            this.tcpClient.disconnect();
+
             App.imageClient = new ImageClient();
             excptn.printStackTrace();
     }
@@ -143,7 +136,6 @@ public class ImageClient extends BaseThread
         } catch (IOException ex) {
            logger.error(ex.getMessage());
            logger.error(ex.getClass());
-            // java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -154,11 +146,11 @@ public class ImageClient extends BaseThread
             try {
                 data = dataToValidate.get();
                 if (data != null) {
-//                    System.out.println("data to process :" + Arrays.toString(data));
+
                     if (tempData == null || tempData.length  == 0) {
 			tempData = data;
                     }else {
-                            // tempData = new byte[tempData.length+data.length];
+
                             byte[] dataPending = tempData;
                             tempData = new byte[tempData.length + data.length];
                             System.arraycopy(dataPending, 0, tempData, 0, dataPending.length);
@@ -209,18 +201,13 @@ public class ImageClient extends BaseThread
 		// System.out.
                 byte[] bufferImage = null;
 		if(capture!=null){
-//			ImageResponse imageResponse = new ImageResponse();
-//			imageResponse.setProtocol((byte)3);
-//                        Dimension dim=Toolkit.getDefaultToolkit().getScreenSize();
-//                        imageResponse.setHeight((int)dim.getHeight());
-//                        imageResponse.setWidth((int)dim.getWidth()); 
-			// imageResponse.setRequestorHash(requestorHash);
+
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			byte[] baosArrays = null;
 			try {
 				ImageIO.write(capture, "png", baos);
 				baos.flush();
-//				imageResponse.setBufferImage(baos.toByteArray());
+
 				bufferImage = baos.toByteArray();
                                 baos.close();
                                 baosArrays = baos.toByteArray();
@@ -228,14 +215,7 @@ public class ImageClient extends BaseThread
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//			logger.debug("last 4 digit of image buff " +
-//                                (char)baosArrays[baosArrays.length -4]);
-//                        logger.debug("last 3 digit of image buff " +
-//                                (char)baosArrays[baosArrays.length -3]);
-//                        logger.debug("last 2 digit of image buff " +
-//                                (char)baosArrays[baosArrays.length -2]);
-//                        logger.debug("last 1 digit of image buff " +
-//                                (char)baosArrays[baosArrays.length  -1]);
+
 			return bufferImage;
 		}
 		return null;
@@ -244,7 +224,7 @@ public class ImageClient extends BaseThread
     public ArrayList<byte[]> chunckData(byte[] data, int chunkCount){
     	int dataCount = data.length;
     	ArrayList<byte[]> chunkdata = new ArrayList<byte[]>(); 
-//    	String SUFFIX = ".part";
+
     	int lengthPerChunk = Math.floorDiv(dataCount ,chunkCount);
     	int indexOfData = 0;
     	for(int i = 1; i <= chunkCount ; i++) {
@@ -252,15 +232,13 @@ public class ImageClient extends BaseThread
     			byte[] dataChunk = new byte[data.length - indexOfData + 5];
     			System.arraycopy(data, indexOfData, dataChunk, 0, lengthPerChunk);
     			indexOfData+=lengthPerChunk;
-//    			System.arraycopy(SUFFIX.getBytes(),0 , dataChunk, lengthPerChunk, 5);
-//    			indexOfData+=5;
+
     			chunkdata.add(dataChunk);
     		}else {
     			byte[] dataChunk = new byte[lengthPerChunk];
     			System.arraycopy(data, indexOfData, dataChunk, 0, lengthPerChunk);
     			indexOfData+=lengthPerChunk;
-//    			System.arraycopy(SUFFIX.getBytes(),0 , dataChunk, lengthPerChunk, 5);
-//    			indexOfData+=5;
+;
     			chunkdata.add(dataChunk);
     		}
     		
@@ -309,16 +287,7 @@ public class ImageClient extends BaseThread
                     }else if(data[0] == 3){
                         ImageResponse imageResponse = new ImageResponse();
                         imageResponse.fromBytes(data);
-//                        App.re
-//                        logger.debug("last 4 digit of image buff " +
-//                                (char)imageResponse.getBufferImage()[imageResponse.getBufferSize() -4]);
-//                        logger.debug("last 3 digit of image buff " +
-//                                (char)imageResponse.getBufferImage()[imageResponse.getBufferSize() -3]);
-//                        logger.debug("last 2 digit of image buff " +
-//                                (char)imageResponse.getBufferImage()[imageResponse.getBufferSize() -2]);
-//                        logger.debug("last 1 digit of image buff " +
-//                                (char)imageResponse.getBufferImage()[imageResponse.getBufferSize() -1]);
-//                        imageResponse.getResult();
+
                         logger.debug("the result is  "+imageResponse.getResult());
                         
                         if (imageResponse.getResult() == 0){
@@ -385,11 +354,7 @@ public class ImageClient extends BaseThread
                                 0, oldBufferSize);
                         System.arraycopy(bufferImageChunk, 0, receiveBufferImage,
                                 oldBufferSize, bufferImageChunk.length);
-                        logger.debug("Chunk data receive"+data[data.length-4]+"<");
-//                        logger.debug("Chunk data receive"+data[data.length-3]+"<");
-//                        logger.debug("Chunk data receive"+data[data.length-2]+"<");
-//                        logger.debug("Chunk data receive"+data[data.length-1]+"<");
-                        logger.debug("if "+chunkImageResponse.getChunkNumber()+"<");
+
                         mapRecieverBufferImage.put(chunkImageResponse.getHash(), receiveBufferImage);
                         if(chunkImageResponse.getChunkNumber() == App.chunkCount-1){
                            
@@ -398,7 +363,6 @@ public class ImageClient extends BaseThread
                             imageRequest.setHash(chunkImageResponse.getHash());
                             imageRequest.setRequestorHash(chunkImageResponse.getRequestorHash());
                             imageRequest.setTotalChunk(App.chunkCount);
-    //                        this.loadingFrame.getjLprocess().s    etText("Sending Image Request To Server ...");
                             App.imageClient.sendImagePacket(imageRequest.toBytes());
                             logger.debug("Image Request Send"); 
                             logger.debug(receiveBufferImage.length);
@@ -407,8 +371,7 @@ public class ImageClient extends BaseThread
                             remoteViewer.updateJScrollView(receiveBufferImage);
                             remoteViewer.chunkIndex = 0;
                             mapRecieverBufferImage.put(chunkImageResponse.getHash(), new byte[0]);
-//                            receiveBufferImage = new byte[0];
-//                            remoteViewer.chunkIndex = 0;
+
                         }else{
                             if(App.mapRemoteViewer
                                     .containsKey(chunkImageResponse.getHash())){
@@ -466,7 +429,8 @@ public class ImageClient extends BaseThread
                 try {
                     java.lang.Thread.sleep(2000);
                 } catch (InterruptedException ex) {
-//                    java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.warn("ERROR :"+ex.getMessage());
+                    ex.printStackTrace();
                 }
                 if(this.getServiceState() ==  com.mayforever.thread.state.ServiceState.RUNNING)
                 {
@@ -478,7 +442,6 @@ public class ImageClient extends BaseThread
                     int diffsec = (int) (timeDiff / (1000));
                     
                     if(diffsec >= 5){
-//                        System.out.println("clearing cache data not process" + diffsec);
                         tempData = null;
                     }
                 }

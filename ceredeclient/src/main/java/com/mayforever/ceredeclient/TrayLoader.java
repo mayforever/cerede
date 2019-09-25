@@ -38,7 +38,6 @@ public class TrayLoader
 
         systemTray.setTooltip("Cerede");
         systemTray.setImage(PATH_ICON);
-        // systemTray.setStatus("No Mail");
         Menu mainMenu = systemTray.getMenu();
         
         menuItemOpenCerede = new MenuItem(OPEN_CEREDE_LABEL, this);

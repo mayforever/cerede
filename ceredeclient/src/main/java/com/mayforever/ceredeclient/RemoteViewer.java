@@ -24,17 +24,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
-import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -58,22 +51,12 @@ public class RemoteViewer extends javax.swing.JFrame
     public int chunkIndex = 0;
     private long lastImageDataTimeProcess = 0l;
     private SessionSendMonitor sessionSendMonitor = null;
-//    private byte[] tempData = null;
-//
-//    public byte[] getTempData() {
-//        return tempData;
-//    }
-//
-//    public void setTempData(byte[] tempData) {
-//        this.tempData = tempData;
-//    }
     public RemoteViewer(String hash) {
  
         
         initComponents();
         
         loadingFrame = new LoadingFrame();
-        // loadingFrame.getjProgressBar().setMaximum(100);
         logger.debug("Maximum loading frame progress :" + loadingFrame.getjProgressBar().getMaximum());
         logger.debug("Manimum loading frame progress :" + loadingFrame.getjProgressBar().getMinimum());
         
@@ -159,28 +142,23 @@ public class RemoteViewer extends javax.swing.JFrame
     int mouseY = 0;
     public void updateJScrollView(byte[] bufferImage){
             
-                    try {
+        try {
 
-                        ByteArrayInputStream in = new ByteArrayInputStream(bufferImage);
-                        DataInputStream dos= new DataInputStream(in);
-//                        dos.flush();
-                        image1 = ImageIO.read(dos);
-//                        BufferedImage image2= ImageIO.read(new ByteArrayInputStream(imageResponse.getBufferImage()));
-                        image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_SMOOTH);
-                        graphics = jPanel1.getGraphics();
+            ByteArrayInputStream in = new ByteArrayInputStream(bufferImage);
+            DataInputStream dos= new DataInputStream(in);
+            image1 = ImageIO.read(dos);
+            image1.getScaledInstance(WIDTH,HEIGHT,Image.SCALE_SMOOTH);
+            graphics = jPanel1.getGraphics();
 
-                         graphics.drawImage(image1, 0, 0, WIDTH,HEIGHT, jPanel1);
+             graphics.drawImage(image1, 0, 0, WIDTH,HEIGHT, jPanel1);
 
-                        this.updateLastSessionDate();
-                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-                        
-                    }catch(Exception e){
-                        e.printStackTrace();
-//                        App.imageClient.socketError(e);
-                    }
-//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-               
+            this.updateLastSessionDate();
+        } catch (IOException ex) {
+            logger.warn("ERROR : "+ex.getMessage());
+//            ex.printStackTrace();
+        }catch(Exception e){
+            e.printStackTrace();
+        }       
         
     }
     
@@ -211,40 +189,7 @@ public class RemoteViewer extends javax.swing.JFrame
         chunkIndex++;
         
     }
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo debug : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(debug.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(debug.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new RemoteVIewer().setVisible(true);
-//            }
-//        });
-//    }
+    
 
     public JPanel getjPanel1() {
         return jPanel1;
@@ -267,27 +212,16 @@ public class RemoteViewer extends javax.swing.JFrame
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
-//        try {
-//            java.lang.Thread.sleep(100);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-//        doCommand(Command.MOUSE_MOVE,e.getX(),e.getY());
-//        try {
-//            this.tcpClient.sendPacket(doCommand(Command.MOUSE_MOVE,e.getX(),e.getY()));
-//        } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
-//        }
         mouseX = e.getX();
         mouseY = e.getY();
-//        System.out.println(InputEvent.getMaskForButton(e.getButton()));
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
         commandRequest.setCommand(Command.MOUSE_MOVE);
@@ -295,18 +229,13 @@ public class RemoteViewer extends javax.swing.JFrame
         commandRequest.setRequestorHash(App.hash);
         int[] params = {mouseX, mouseY};
         commandRequest.setParams(params);
-//        logger.debug(commandRequest.toBytes());
         try {
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
-//        try {
-//            java.lang.Thread.sleep(100);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
     
 
@@ -319,7 +248,6 @@ public class RemoteViewer extends javax.swing.JFrame
     @Override
     public void mousePressed(MouseEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-//        System.out.println(InputEvent.getMaskForButton(e.getButton()));
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
         commandRequest.setCommand(Command.MOUSE_PRESSED);
@@ -331,21 +259,14 @@ public class RemoteViewer extends javax.swing.JFrame
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-//        System.out.println(e.getButton());
-////        doCommand(Command.MOUSE_RELEASED,e.getX(),e.getY());
-//        try {
-//            this.tcpClient.sendPacket(doCommand(Command.MOUSE_RELEASED,e.getButton()));
-//        } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        System.out.println(InputEvent.getMaskForButton(e.getButton()));
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
         commandRequest.setCommand(Command.MOUSE_RELEASED);
@@ -357,7 +278,8 @@ public class RemoteViewer extends javax.swing.JFrame
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -374,14 +296,11 @@ public class RemoteViewer extends javax.swing.JFrame
     @Override
     public void keyTyped(KeyEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-//        doCommand(Command.MOUSE_RELEASED,e.getKeyChar());
-//        System.out.println("the key is :"+e.getExtendedKeyCode());
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-//        doCommand(Command.MOUSE_RELEASED,e.getKeyChar());
         System.out.println("the key is :"+e.getExtendedKeyCode());
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
@@ -394,7 +313,8 @@ public class RemoteViewer extends javax.swing.JFrame
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -411,25 +331,25 @@ public class RemoteViewer extends javax.swing.JFrame
         commandRequest.setParams(params);
         try {
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
-
         } catch (IOException ex) {
-//            Logger.getLogger(ScreenLoader.class.getName()).log(Level.SEVERE, null, ex);
+            logger.warn("ERROR :"+ex.getMessage());
+            ex.printStackTrace();
         }
     }
 
     @Override
     public void windowOpened(WindowEvent we) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void windowClosing(WindowEvent we) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void windowClosed(WindowEvent we) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // To change body of generated methods, choose Tools | Templates.
         this.sessionSendMonitor.stopSenderMonitor();
         App.mapRemoteViewer.remove(hash);
     }
@@ -473,7 +393,7 @@ public class RemoteViewer extends javax.swing.JFrame
                     long timeDiff = currentTime - lastImageDataTimeProcess;
                     
                     int diffsec = (int) (timeDiff / (1000));
-//                    System.out.println("diffSex " + diffsec);
+                    
                     if(diffsec >= 5){
                         sessionLimit--;
                         if(sessionLimit == 0){
@@ -487,11 +407,11 @@ public class RemoteViewer extends javax.swing.JFrame
                         imageRequest.setHash(hash);
                         imageRequest.setRequestorHash(App.hash);
                         imageRequest.setTotalChunk(App.chunkCount);
-//                        loadingFrame.getjLprocess().setText("Sending Image Request To Server ...");
                         App.imageClient.sendImagePacket(imageRequest.toBytes());
                     }
                 } catch (InterruptedException ex) {
-//                    java.util.logging.Logger.getLogger(RemoteViewer.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.warn("ERROR :"+ex.getMessage());
+                    ex.printStackTrace();
                 }
             }
         }
@@ -502,41 +422,7 @@ public class RemoteViewer extends javax.swing.JFrame
         lastImageDataTimeProcess = date.getTime();
     }
     
-    
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo debug : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(debug.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(debug.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(RemoteVIewer.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new RemoteVIewer().setVisible(true);
-//            }
-//        });
-//    }
+   
     public JScrollPane getjScrollPane1() {
         return jScrollPane1;
     }

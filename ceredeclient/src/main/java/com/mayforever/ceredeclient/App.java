@@ -96,7 +96,6 @@ public class App {
                     sb.append(String.format("%02x", b));
                 }
                 hash = sb.toString();
-//                 System.out.println("remote hash : " + hash);
             } catch (NoSuchAlgorithmException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();

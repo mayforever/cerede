@@ -7,7 +7,6 @@ package com.mayforever.ceredeclient.model;
 
 import com.mayforever.tools.BitConverter;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
 
 /**
  *
@@ -171,47 +170,4 @@ public class ChunkImageResponse extends BaseClass{
     public void setChunkNumber(int chunkNumber) {
         this.chunkNumber = chunkNumber;
     }
-//    @Override
-//    public ArrayList<byte[]> toChunkBytes() {
-//        
-//    }
-//
-//    @Override
-//    public void fromChunkBytes(byte[] data, ArrayList<byte[]> dataChunks) {
-//        
-//    }
-
-//    @Override
-//    public ArrayList<byte[]> toChunkBytes(byte[] data, int chunkCount) {
-////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//        int dataCount = data.length;
-//    	ArrayList<byte[]> chunkdata = new ArrayList<byte[]>(); 
-//    	String SUFFIX = ".part";
-//    	int lengthPerChunk = Math.floorDiv(dataCount ,chunkCount);
-//    	int indexOfData = 0;
-//    	for(int i = 1; i < chunkCount ; i++) {
-//    		if(chunkCount ==i) {
-//    			byte[] dataChunk = new byte[data.length - indexOfData + 5];
-//    			System.arraycopy(data, indexOfData, dataChunk, 0, lengthPerChunk);
-//    			indexOfData+=lengthPerChunk;
-//    			System.arraycopy(SUFFIX.getBytes(),0 , dataChunk, lengthPerChunk, 5);
-//    			indexOfData+=5;
-//    			chunkdata.add(dataChunk);
-//    		}else {
-//    			byte[] dataChunk = new byte[lengthPerChunk];
-//    			System.arraycopy(data, indexOfData, dataChunk, 0, lengthPerChunk);
-//    			indexOfData+=lengthPerChunk;
-//    			System.arraycopy(SUFFIX.getBytes(),0 , dataChunk, lengthPerChunk, 5);
-//    			indexOfData+=5;
-//    			chunkdata.add(dataChunk);
-//    		}
-//    		
-//    	}
-//    	return chunkdata;
-//    }
-//
-//    @Override
-//    public void fromChunkBytes(byte[] data, ArrayList<byte[]> dataChunks) {
-////        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 }

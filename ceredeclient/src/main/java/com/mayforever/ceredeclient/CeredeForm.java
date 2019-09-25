@@ -5,15 +5,10 @@
  */
 package com.mayforever.ceredeclient;
 
-import com.mayforever.ceredeclient.model.ImageRequest;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import org.apache.log4j.Logger;
 
@@ -131,7 +126,6 @@ public class CeredeForm extends javax.swing.JFrame implements Runnable, ActionLi
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(this);
         
-//        this.setVisible(true);
         
     }
     
@@ -174,14 +168,7 @@ public class CeredeForm extends javax.swing.JFrame implements Runnable, ActionLi
             
             
             this.setVisible(false);
-//            String toRequestorHash = App.username + App.password;
-//            String requestorHash = App.toHash(toRequestorHash);
-            
-//            imageRequest.setHash(hash);
-//            imageRequest.setRequestorHash(requestorHash);
-//            
-//            App.imageClient.sendPacket(imageRequest.toBytes());
-        }
+       }
     }
     
     

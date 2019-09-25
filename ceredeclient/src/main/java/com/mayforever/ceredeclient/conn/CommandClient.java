@@ -35,7 +35,7 @@ public class CommandClient  extends BaseThread
     private byte[] tempData = null;
     private Queue<byte[]> dataProcess = null;
     private Queue<byte[]> dataToValidate = null;
-//    private 
+ 
     public CommandClient(){
         boolean isAlive = false;
         logger = Logger.getLogger("COMMAND CLIENT");
@@ -47,20 +47,16 @@ public class CommandClient  extends BaseThread
                 logger.info("server reconnected sucessfuly");
                 isAlive = true;
             }catch (NullPointerException e){
-                logger.info("reconecting to server");
-//                App.imageClient = new ImageClient();
-                
+                logger.info("reconecting to server");                
                 try {
                     java.lang.Thread.sleep(3000);
                 } catch (InterruptedException ex) {
-    //                java.util.logging.Logger.getLogger(ImageClient.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.warn("ERROR :"+ex.getMessage());
+                    ex.printStackTrace();
                 }
-
             }
         }
-        
-//        this.tcpClient = new com.mayforever.network.newtcp.TCPClient(App.serverIP, App.serverPort);
-//        this.tcpClient.addListener(this);
+
         
         this.sendAuthentication();
         logger.debug("the authentication has been sent");
@@ -72,7 +68,6 @@ public class CommandClient  extends BaseThread
     @Override
     public void packetData(byte[] bytes) {
         this.dataToValidate.add(bytes);
-//        logger.debug(Arrays.toString(bytes));
     }
 
     @Override
@@ -107,11 +102,10 @@ public class CommandClient  extends BaseThread
             try {
                 data = dataToValidate.get();
                 if (data != null) {
-//                    System.out.println("data to process :" + Arrays.toString(data));
                     if (tempData == null || tempData.length  == 0) {
 			tempData = data;
                     }else {
-                            // tempData = new byte[tempData.length+data.length];
+                            
                             byte[] dataPending = tempData;
                             tempData = new byte[tempData.length + data.length];
                             System.arraycopy(dataPending, 0, tempData, 0, dataPending.length);
@@ -128,7 +122,7 @@ public class CommandClient  extends BaseThread
 				this.dataProcess.add(tempData);
 				tempData = new byte[0];
 			}else if(dataProcessSize < tempData.length) {
-//				byte[] newTempData = tempData;
+                          
                                 byte[] dataToProcess = new byte[dataProcessSize];
 				System.arraycopy(tempData, 0, dataToProcess, 0, dataProcessSize);
 				this.dataProcess.add(dataToProcess);
@@ -148,7 +142,7 @@ public class CommandClient  extends BaseThread
                 }
             } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
-                    e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
@@ -179,40 +173,32 @@ public class CommandClient  extends BaseThread
                         }
                     }
                 } catch (InterruptedException ex) {
-//                    java.util.logging.Logger.getLogger(CommandClient.class.getName()).log(Level.SEVERE, null, ex);
+                    logger.warn("ERROR :"+ex.getMessage());
+                    ex.printStackTrace();
                 }
             }  
         }
     }
     
     private void doEvent(CommandRequest commandRequest){
-//		CommandRequest commandRequest = new CommandRequest();
-		
-		byte command = (byte)999;
-		try{
-//			commandRequest.fromBytes(data);
-			command = commandRequest.getCommand();
-		}catch (Exception e){
-			System.out.println("failed to catch real command please repeat");
-//			return;
-		}
-		
-		if(command == Command.MOUSE_PRESSED){
-//			System.out.println(commandRequest.getParams()[0]);
-			App.imageClient.getRobot().mousePress(commandRequest.getParams()[0]);
-//			robot.mouseMove(commandRequest.getParams()[1],
-//			commandRequest.getParams()[2]);
-			
-		}else if (command == Command.MOUSE_RELEASED){
-			
-			App.imageClient.getRobot().mouseRelease(commandRequest.getParams()[0]);
-		}else if (command == Command.MOUSE_MOVE){
-			App.imageClient.getRobot().mouseMove(commandRequest.getParams()[0],
-					commandRequest.getParams()[1]);
-		}else if (command == Command.KEY_PRESSED){
-			App.imageClient.getRobot().keyPress(commandRequest.getParams()[0]);
-		}else if (command == Command.KEY_RELEASED){
-			App.imageClient.getRobot().keyRelease(commandRequest.getParams()[0]);
-		}
-	}
+        byte command = (byte)999;
+        try{
+                command = commandRequest.getCommand();
+        }catch (Exception e){
+                System.out.println("failed to catch real command please repeat");
+        }
+
+        if(command == Command.MOUSE_PRESSED){
+                App.imageClient.getRobot().mousePress(commandRequest.getParams()[0]);
+        }else if (command == Command.MOUSE_RELEASED){
+                App.imageClient.getRobot().mouseRelease(commandRequest.getParams()[0]);
+        }else if (command == Command.MOUSE_MOVE){
+                App.imageClient.getRobot().mouseMove(commandRequest.getParams()[0],
+                                commandRequest.getParams()[1]);
+        }else if (command == Command.KEY_PRESSED){
+                App.imageClient.getRobot().keyPress(commandRequest.getParams()[0]);
+        }else if (command == Command.KEY_RELEASED){
+                App.imageClient.getRobot().keyRelease(commandRequest.getParams()[0]);
+        }
+    }
 }
