@@ -69,4 +69,4 @@ Sorry for my bad english. I hope you understand, thanks.
 
 ps: this is not final. I need to improve it. so I open in any suggestion. 
 
-sorry for not giving the bin files yet. This is undercontruction. pls wait patiently. but you can comile it if you want.just clone the following library.[Java Tools](https://github.com/mayforever/JavaTools). thanks
+sorry for not giving the bin files yet. This is undercontruction. pls wait patiently. but you can comile it if you want.just clone the following library.[Java Tools](https://github.com/mayforever/JavaTools)(pick alwayslatest version). thanks
