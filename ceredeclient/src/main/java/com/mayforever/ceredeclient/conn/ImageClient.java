@@ -257,7 +257,7 @@ public class ImageClient extends BaseThread
             byte[] data = null;
             try {
                 data = dataProcess.get();
-                if (data != null) {
+                if (data != null && data.length != 0) {
 //                    System.out.println("data to process :" + Arrays.toString(data));
                     
                     if(data[0] == 2) {
@@ -288,7 +288,7 @@ public class ImageClient extends BaseThread
                         ImageResponse imageResponse = new ImageResponse();
                         imageResponse.fromBytes(data);
 
-                        logger.debug("the result is  "+imageResponse.getResult());
+//                        logger.info("the result is  "+imageResponse.getResult());
                         
                         if (imageResponse.getResult() == 0){
                             if(App.mapRemoteViewer
@@ -319,6 +319,13 @@ public class ImageClient extends BaseThread
                                 }
                             }
                               
+                        }else{
+                                
+                            RemoteViewer remoteViewer = App.mapRemoteViewer
+                                 .get(imageResponse.getHash());
+                            App.mapRemoteViewer.remove(imageResponse.getHash())
+                            remoteViewer.dispose();
+//                            logger.info("the result is  "+imageResponse.getResult());
                         }
                         
                     }else if(data[0] == 4){

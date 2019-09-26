@@ -77,7 +77,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jtUser">
       <Properties>
-        <Property name="text" type="java.lang.String" value="mis"/>
+        <Property name="text" type="java.lang.String" value="testpc1"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JPasswordField" name="jptPassword">

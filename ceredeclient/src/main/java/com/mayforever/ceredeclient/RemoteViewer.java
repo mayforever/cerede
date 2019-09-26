@@ -27,6 +27,7 @@ import java.awt.event.WindowListener;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -63,9 +64,10 @@ public class RemoteViewer extends javax.swing.JFrame
         this.hash = hash;
         this.jPanel1.addMouseListener(this);
         this.jPanel1.addMouseMotionListener(this);
-        this.jPanel1.addKeyListener(this);
+        
         this.showRemoteViewer();
         
+        this.addKeyListener(this);
         this.addWindowListener(this);
     }
 
@@ -301,7 +303,7 @@ public class RemoteViewer extends javax.swing.JFrame
     @Override
     public void keyPressed(KeyEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-        System.out.println("the key is :"+e.getExtendedKeyCode());
+//        System.out.println("the key is :"+e.getExtendedKeyCode());
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
         commandRequest.setCommand(Command.KEY_PRESSED);
@@ -310,6 +312,7 @@ public class RemoteViewer extends javax.swing.JFrame
         int[] params = {e.getExtendedKeyCode()};
         commandRequest.setParams(params);
         try {
+            
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
 
         } catch (IOException ex) {
@@ -321,22 +324,23 @@ public class RemoteViewer extends javax.swing.JFrame
     @Override
     public void keyReleased(KeyEvent e) {
         //To change body of generated methods, choose Tools | Templates.
-        System.out.println("the key is :"+e.getExtendedKeyCode());
+//        System.out.println("the key is :"+e.getExtendedKeyCode());
         CommandRequest commandRequest = new CommandRequest();
         commandRequest.setProtocol((byte)6);
         commandRequest.setCommand(Command.KEY_RELEASED);
         commandRequest.setHash(hash);
-        commandRequest.setRequestorHash(App.hash);
+        commandRequest.setRequestorHash(App.hmaash);
         int[] params = {e.getExtendedKeyCode()};
         commandRequest.setParams(params);
         try {
             App.commandClient.getTcpClient().sendPacket(commandRequest.toBytes());
+            
         } catch (IOException ex) {
             logger.warn("ERROR :"+ex.getMessage());
             ex.printStackTrace();
         }
     }
-
+    
     @Override
     public void windowOpened(WindowEvent we) {
         // To change body of generated methods, choose Tools | Templates.
@@ -396,11 +400,7 @@ public class RemoteViewer extends javax.swing.JFrame
                     
                     if(diffsec >= 5){
                         sessionLimit--;
-                        if(sessionLimit == 0){
-                            App.imageClient.socketError(new Exception("Broken Peer Error"));
-                            logger.warn("Peer is Broken");
-                            sessionLimit = 5;
-                        }
+                        updateLastSessionDate();
                         logger.info("Request Timeout Create Another Image Request");
                         ImageRequest imageRequest = new ImageRequest();
         
@@ -408,6 +408,12 @@ public class RemoteViewer extends javax.swing.JFrame
                         imageRequest.setRequestorHash(App.hash);
                         imageRequest.setTotalChunk(App.chunkCount);
                         App.imageClient.sendImagePacket(imageRequest.toBytes());
+                        
+                        if(sessionLimit == 0){
+                            App.imageClient.socketError(new Exception("Broken Peer Error"));
+                            logger.warn("Peer is Broken");
+                            sessionLimit = 5;
+                        }
                     }
                 } catch (InterruptedException ex) {
                     logger.warn("ERROR :"+ex.getMessage());
